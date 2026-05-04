@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linkly CP Product Taxonomy - v3 Hypothesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-50:#E6F1FB;--blue-100:#B5D4F4;--blue-700:#185FA5;--blue-800:#0C447C;
+  --blue2-bg:#DBEAFE;--blue2-text:#1e40af;
+  --teal-50:#E1F5EE;--teal-100:#9FE1CB;--teal-400:#1D9E75;--teal-700:#0F6E56;--teal-800:#085041;
+  --amber-50:#FAEEDA;--amber-100:#FAC775;--amber-700:#854F0B;--amber-800:#633806;
+  --purple-50:#EEEDFE;--purple-100:#CECBF6;--purple-700:#534AB7;--purple-800:#3C3489;
+  --red-50:#FCEBEB;--red-100:#F7C1C1;--red-700:#A32D2D;
+  --green-50:#EAF3DE;--green-100:#C0DD97;--green-700:#3B6D11;--green-800:#27500A;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-150:#E2E8F0;--gray-200:#CBD5E1;
+  --gray-400:#94A3B8;--gray-500:#64748B;--gray-700:#334155;--gray-900:#0F172A;
+
+  --font:'DM Sans',sans-serif;
+  --font-head:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body { font-family: var(--font); background: var(--gray-100); color: var(--gray-900); min-height: 100vh; }
+
+/* PAGE HEADER */
+.page-header {
+  background: var(--gray-900);
+  padding: 20px 56px 0;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid #1E293B;
+}
+.header-inner { display: flex; align-items: stretch; justify-content: space-between; }
+.header-brand { display: flex; align-items: center; gap: 14px; padding: 18px 0 0; }
+.brand-mark { display: none; }
+.header-text {}
+.page-title { font-size: 15px; font-weight: 500; color: #fff; letter-spacing: -.01em; }
+.page-meta { font-size: 11px; color: #64748B; margin-top: 3px; font-family: var(--mono); }
+.header-right { display: flex; align-items: center; gap: 8px; padding-bottom: 18px; }
+.page-badge { font-size: 10px; font-weight: 500; padding: 4px 10px; border-radius: 4px; background: #1E293B; color: #94A3B8; border: 1px solid #334155; }
+.main-tabs { display: flex; align-items: flex-end; gap: 0; padding-top: 12px; }
+.main-tab { font-family: var(--font); font-size: 12.5px; font-weight: 500; padding: 11px 22px; cursor: pointer; color: #64748B; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; user-select: none; }
+.main-tab:hover { color: #94A3B8; }
+.main-tab.active { color: #fff; border-bottom-color: #fff; }
+
+/* MAIN */
+.main { padding: 36px 56px 80px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* SECTION NAV */
+.section-nav { display: flex; gap: 8px; margin-bottom: 28px; align-items: center; }
+.section-btn {
+  font-family: var(--font); font-size: 12px; font-weight: 500;
+  padding: 7px 18px; border-radius: 20px; cursor: pointer;
+  border: 1px solid var(--gray-200); background: #fff; color: var(--gray-500);
+  transition: all .15s; user-select: none;
+}
+.section-btn:hover { border-color: var(--teal-100); color: var(--teal-700); }
+.section-btn.active { background: var(--gray-900); color: #fff; border-color: var(--gray-900); }
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+
+.mode-nav { display: flex; gap: 8px; margin-bottom: 24px; align-items: center; }
+.mode-btn {
+  font-family: var(--font); font-size: 12px; font-weight: 500;
+  padding: 6px 16px; border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--gray-200); background: #fff; color: var(--gray-500);
+  transition: all .15s; user-select: none;
+}
+.mode-btn:hover { border-color: var(--gray-400); color: var(--gray-700); }
+.mode-btn.active { background: var(--gray-700); color: #fff; border-color: var(--gray-700); }
+.mode-panel { display: none; }
+.mode-panel.active { display: block; }
+
+/* LEGEND */
+.legend {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  margin-bottom: 28px; padding: 12px 20px;
+  background: #fff; border: 1px solid var(--gray-150); border-radius: 10px;
+}
+.legend-title { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--gray-400); margin-right: 4px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--gray-500); }
+
+/* GRID */
+.products-scroll { overflow-x: auto; padding-bottom: 20px; }
+.products-grid { display: grid; gap: 16px; min-width: max-content; }
+.grid-3 { grid-template-columns: repeat(3, 360px); }
+.grid-2 { grid-template-columns: repeat(2, 420px); }
+.grid-1 { grid-template-columns: 620px; }
+.scroll-hint { font-size: 11px; color: var(--gray-400); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+
+/* PRODUCT CARD */
+.prod {
+  background: #fff; border: 1px solid var(--gray-150); border-radius: 14px;
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: box-shadow .15s, transform .1s;
+}
+.prod:hover { box-shadow: 0 6px 32px rgba(2,64,65,.08); }
+.prod.eol { opacity: .93; }
+.prod.featured { border-width: 1.5px; border-color: var(--teal-400); }
+.prod.emerging-card { border-width: 1.5px; border-color: var(--purple-100); }
+
+/* HEADER */
+.prod-hdr { padding: 18px 20px 16px; border-bottom: 1px solid var(--gray-150); }
+.hdr-top { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px; }
+.status-chips { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.status-chip { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 4px; white-space: nowrap; }
+.prod-name {
+  font-family: var(--font-head); font-size: 20px; font-weight: 500;
+  letter-spacing: -.025em; margin-bottom: 10px; color: var(--gray-900);
+  line-height: 1.1;
+}
+.prod-name .eol-label { font-size: 12px; font-weight: 400; color: var(--red-700); margin-left: 8px; font-family: var(--font); }
+.archetype {
+  font-size: 12px; color: var(--gray-500); line-height: 1.65;
+  font-style: italic; padding: 10px 12px;
+  background: var(--gray-50); border-radius: 7px;
+  border-left: 2.5px solid var(--gray-200);
+}
+
+/* BANNERS */
+.orbit-banner { background: var(--teal-50); border-bottom: 1px solid var(--teal-100); padding: 9px 18px; display: flex; gap: 9px; align-items: flex-start; }
+.orbit-banner-dot { width: 7px; height: 7px; background: var(--teal-700); border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.orbit-banner-text { font-size: 11px; color: var(--teal-700); line-height: 1.55; }
+.emerging-banner { background: var(--purple-50); border-bottom: 1px solid var(--purple-100); padding: 9px 18px; display: flex; gap: 9px; align-items: flex-start; }
+.emerging-banner-dot { width: 7px; height: 7px; background: var(--purple-700); border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.emerging-banner-text { font-size: 11px; color: var(--purple-800); line-height: 1.55; }
+.eol-strip { background: var(--red-50); border-bottom: 1px solid var(--red-100); padding: 8px 18px; display: flex; align-items: center; gap: 9px; }
+.eol-strip-dot { width: 7px; height: 7px; background: var(--red-700); border-radius: 50%; flex-shrink: 0; }
+.eol-strip-text { font-size: 11px; color: var(--red-700); font-weight: 500; }
+
+/* MODES ROW */
+.modes-row {
+  padding: 10px 18px; background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-150);
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+}
+.modes-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-400); margin-right: 3px; }
+.mode-pill { font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 10px; border: 1px solid; white-space: nowrap; }
+.mpill-std { background: var(--green-50); color: var(--green-700); border-color: var(--green-100); }
+.mpill-add { background: var(--amber-50); color: var(--amber-700); border-color: var(--amber-100); }
+.mpill-na { background: var(--gray-100); color: var(--gray-400); border-color: var(--gray-150); }
+.mode-note { font-size: 10px; color: var(--gray-400); font-style: italic; margin-top: 3px; width: 100%; }
+
+/* BODY */
+.prod-body { display: flex; flex-direction: column; flex: 1; }
+.sect { padding: 14px 18px; border-bottom: 1px solid var(--gray-150); }
+.sect:last-child { border-bottom: none; }
+.sect-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .07em; margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 7px; }
+.item:last-child { margin-bottom: 0; }
+.dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.item-text { font-size: 12px; color: var(--gray-500); line-height: 1.6; flex: 1; }
+.item-text strong { font-weight: 500; color: var(--gray-700); }
+.item-text .note { font-size: 11px; color: var(--gray-400); }
+
+/* PRICE BADGE */
+.price {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+  flex-shrink: 0; margin-top: 1px;
+}
+.price-real { background: var(--green-50); color: var(--green-800); border: 1px solid var(--green-100); }
+.price-proposed { background: var(--gray-100); color: var(--gray-500); border: 1px solid var(--gray-200); font-style: italic; }
+.price-tbd { background: var(--gray-100); color: var(--gray-400); border: 1px dashed var(--gray-200); }
+
+.ctags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.ctag {
+  font-size: 10px; padding: 3px 8px; border-radius: 4px;
+  background: var(--gray-100); color: var(--gray-500);
+  border: 1px solid var(--gray-150); font-family: var(--mono);
+}
+.ctag.eol-tag { text-decoration: line-through; opacity: .45; }
+.ctag.dim { opacity: .55; }
+.qref {
+  font-size: 9px; font-weight: 500; padding: 1px 5px; border-radius: 3px;
+  background: var(--amber-50); color: var(--amber-700);
+  border: 1px solid var(--amber-100); font-family: var(--mono);
+  vertical-align: middle; margin-left: 3px; cursor: default;
+}
+.rev-badge {
+  display: inline-block; font-family: var(--mono);
+  font-size: 15px; font-weight: 500; color: var(--gray-900); margin-bottom: 5px;
+}
+
+/* TECH ROW */
+.tech-row {
+  background: var(--gray-50); border-top: 1px dashed var(--gray-200);
+  padding: 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.tech-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 7px; }
+.t-chip {
+  font-size: 9px; font-weight: 500; padding: 1px 5px; border-radius: 3px;
+  font-family: var(--mono); margin-left: 3px; vertical-align: middle;
+}
+
+/* 2-COL GRID for wide cards */
+.two-col-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.two-col-body .sect { border-right: 1px solid var(--gray-150); border-bottom: 1px solid var(--gray-150); }
+.two-col-body .sect:nth-child(even) { border-right: none; }
+.two-col-body .sect:nth-last-child(-n+2) { border-bottom: none; }
+
+/* PRICING NOTE */
+.pricing-note {
+  font-size: 10.5px; color: var(--gray-400); padding: 10px 18px;
+  background: var(--gray-50); border-top: 1px solid var(--gray-150); font-style: italic;
+}
+
+/* STRATEGIC QUESTIONS */
+.sq-section { padding: 36px 56px 80px; }
+.sq-title {
+  font-family: var(--font-head); font-size: 12px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .09em; color: var(--gray-400);
+  margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+}
+.sq-title::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+.sq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sq-card {
+  background: #fff; border: 1px solid var(--gray-150); border-radius: 10px;
+  padding: 16px 18px; transition: box-shadow .15s;
+}
+.sq-card:hover { box-shadow: 0 3px 16px rgba(2,64,65,.07); }
+.sq-num {
+  font-family: var(--mono); font-size: 10px; font-weight: 500; padding: 2px 7px;
+  border-radius: 4px; background: var(--amber-50); color: var(--amber-700);
+  border: 1px solid var(--amber-100); display: inline-block; margin-bottom: 10px;
+}
+.sq-q { font-family: var(--font-head); font-size: 13px; font-weight: 500; color: var(--gray-900); margin-bottom: 7px; line-height: 1.4; }
+.sq-body { font-size: 12px; color: var(--gray-500); line-height: 1.7; }
+.sq-resolved { border-left: 3px solid var(--green-700); }
+.sq-resolved .sq-num { background: var(--green-50); color: var(--green-800); border-color: var(--green-100); }
+
+/* COLOR SHORTCUTS */
+.c-teal { color: var(--teal-800); }
+.c-blue2 { color: var(--blue2-text); }
+.c-teal { color: var(--teal-700); }
+.c-teal2 { color: var(--teal-800); }
+.c-amber { color: var(--amber-800); }
+.c-purple { color: var(--purple-800); }
+.c-red { color: var(--red-700); }
+.c-green { color: var(--green-700); }
+.c-blue { color: var(--blue-700); }
+
+.bg-teal { background: var(--teal-50); color: var(--teal-800); }
+.bg-blue2 { background: var(--blue2-bg); color: var(--blue2-text); }
+.bg-blue { background: var(--blue-50); color: var(--blue-700); }
+.bg-teal { background: var(--teal-50); color: var(--teal-700); }
+.bg-teal2 { background: var(--teal-100); color: var(--teal-800); }
+.bg-amber { background: var(--amber-50); color: var(--amber-800); }
+.bg-purple { background: var(--purple-50); color: var(--purple-800); }
+.bg-red { background: var(--red-50); color: var(--red-700); }
+.bg-green { background: var(--green-50); color: var(--green-800); }
+
+.dot-teal { background: var(--teal-700); }
+.dot-blue2 { background: var(--blue2-text); }
+.dot-blue { background: var(--blue-700); }
+.dot-teal { background: var(--teal-700); }
+.dot-teal2 { background: var(--teal-800); }
+.dot-amber { background: var(--amber-700); }
+.dot-purple { background: var(--purple-700); }
+.dot-red { background: var(--red-700); }
+.dot-green { background: var(--green-700); }
+.dot-gray { background: var(--gray-200); }
+
+/* SPEC SHEET */
+.sc-scroll { overflow-x: auto; border-radius: 12px; border: 1px solid var(--gray-200); background: #fff; margin-bottom: 20px; }
+.sc-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.sc-table col.sc-feat { width: 230px; }
+.sc-table col.sc-prod { width: 112px; }
+.sc-prod-hdr th { padding: 0; border-bottom: 1px solid var(--gray-200); vertical-align: bottom; }
+.sc-feat-hdr { background: var(--gray-50); }
+.sc-feat-hdr { padding: 12px 16px; text-align: left; background: var(--gray-50); border-right: 1px solid var(--gray-200); font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--gray-400); }
+.sc-ph-inner { padding: 10px 6px 9px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.sc-pname { font-size: 11px; font-weight: 500; white-space: nowrap; }
+.sc-psub { font-size: 9px; opacity: .75; white-space: nowrap; }
+.sc-eol-tag { font-size: 8px; font-weight: 500; padding: 1px 5px; border-radius: 3px; background: #FCEBEB; color: #A32D2D; border: 1px solid #F7C1C1; }
+.sc-section td { padding: 8px 16px; background: var(--gray-100); border-top: 2px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--gray-500); }
+tr.sc-row { height: 40px; border-bottom: 1px solid var(--gray-100); }
+tr.sc-row:hover { background: #FAFBFC; }
+tr.sc-row:last-child { border-bottom: none; }
+.sc-fc { padding: 6px 16px; vertical-align: middle; border-right: 1px solid var(--gray-200); }
+.sc-fn { font-size: 11px; color: var(--gray-700); white-space: normal; word-break: normal; }
+.sc-fn-sub { font-size: 10px; color: var(--gray-400); margin-top: 1px; }
+.sc-vc { text-align: center; vertical-align: middle; border-right: 1px solid var(--gray-100); padding: 0 3px; }
+.sc-vc:last-child { border-right: none; }
+.sc-vc.sc-eol { opacity: .42; }
+.v-s { display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;background:var(--sc-std-bg);border:1px solid var(--sc-std-b); }
+.v-s svg { width:12px;height:12px;stroke:var(--sc-std);stroke-width:2.5;fill:none; }
+.v-a { display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;background:var(--sc-add-bg);border:1px solid var(--sc-add-b);font-size:12px;font-weight:600;color:var(--sc-add); }
+.v-n { display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;background:var(--sc-na-bg);border:1px solid var(--gray-200);font-size:13px;color:var(--sc-na); }
+.v-t { font-size:10px;font-weight:500;font-family:var(--mono);padding:2px 6px;border-radius:4px;background:var(--gray-100);color:var(--gray-500);white-space:nowrap; }
+.v-t.g { background:#F0FDF4;color:#16A34A; }
+.v-t.a { background:#FFFBEB;color:#B45309; }
+.v-t.gr { background:var(--sc-na-bg);color:var(--sc-na); }
+.v-t.p { background:#EDE9FE;color:#5B21B6; }
+.sc-legend { display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:24px;padding:10px 16px;background:#fff;border:1px solid var(--gray-200);border-radius:8px; }
+.sc-leg-title { font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400); }
+.sc-leg-item { display:flex;align-items:center;gap:7px;font-size:12px;color:var(--gray-500); }
+.sc-footnote { font-size:11px;color:var(--gray-400);line-height:1.7;margin-top:14px; }
+.sc-footnote span { display:block; }
+.sc-sub-nav { display:flex;gap:8px;margin-bottom:18px; }
+.sc-sub-btn { font-size:11px;font-weight:500;padding:5px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--gray-200);background:#fff;color:var(--gray-500);transition:all .15s;user-select:none; }
+.sc-sub-btn:hover { border-color:var(--gray-300);color:var(--gray-700); }
+.sc-sub-btn.active { background:var(--gray-700);color:#fff;border-color:var(--gray-700); }
+.sc-sub-panel { display:none; }
+.sc-sub-panel.active { display:block; }
+
+/* CUSTOMER TOOLTIP */
+.ctag { cursor: default; }
+.ctag[data-tip] { cursor: help; }
+#ctip {
+  position: fixed; z-index: 9999; pointer-events: none;
+  background: #0F172A; color: #fff;
+  font-size: 11px; font-family: var(--mono);
+  padding: 8px 12px; border-radius: 7px;
+  white-space: pre; line-height: 1.65;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  display: none;
+}
+/* REQUIRES INVESTIGATION badge */
+.price-inv { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="brand-mark">L</div>
+      <div class="header-text">
+        <div class="page-title">Card-Present Product Taxonomy</div>
+        <div class="page-meta">Linkly · Version 4 · May 2026</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end">
+      <div class="header-right">
+        <span class="page-badge">Internal only</span>
+        <span class="page-badge">Not for distribution</span>
+      </div>
+      <div class="main-tabs">
+        <div class="main-tab active" onclick="switchMain('products')">Products</div>
+        <div class="main-tab" onclick="switchMain('questions')">Strategic Questions <span style="font-family:var(--mono);font-size:10px;margin-left:5px;opacity:.55">9</span></div>
+        <div class="main-tab" onclick="switchMain('specsheet')">Spec Sheet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS TAB -->
+<div id="panel-products" class="tab-panel active">
+<div class="main">
+
+  <div class="legend">
+    <span class="legend-title">Legend</span>
+    <div class="legend-item"><span class="mode-pill mpill-std">standard</span> Included in base price</div>
+    <div class="legend-item"><span class="mode-pill mpill-add">add-on</span> Separately charged</div>
+    <div class="legend-item"><span class="mode-pill mpill-na">N/A</span> Not available</div>
+    <div class="legend-item"><span class="price price-real">$x</span> Confirmed pricing</div>
+    <div class="legend-item"><span class="price price-proposed">$x *</span> Proposed pricing</div>
+    <div class="legend-item"><span class="qref">Q1</span> Strategic question</div>
+    <div class="legend-item" style="margin-left:auto;font-size:11px;color:var(--gray-400)">All per terminal per month unless stated</div>
+  </div>
+
+  <div class="section-nav">
+    <div class="section-btn active" onclick="switchSection('legacy')">Legacy</div>
+    <div class="section-btn" onclick="switchSection('new')">Active Portfolio</div>
+    <div class="section-btn" onclick="switchSection('emerging')">Emerging</div>
+  </div>
+
+  <!-- LEGACY -->
+  <div id="section-legacy" class="section-panel active">
+    <div class="mode-nav">
+      <div class="mode-btn active" onclick="switchLegacyMode('leg-integrated')">Integrated</div>
+      <div class="mode-btn" onclick="switchLegacyMode('leg-standalone')">Standalone</div>
+    </div>
+
+    <div id="leg-integrated" class="mode-panel active">
+    <div class="products-scroll">
+    <div class="products-grid grid-1">
+      <div class="prod eol" style="max-width:560px">
+        <div class="eol-strip">
+          <div class="eol-strip-dot"></div>
+          <div class="eol-strip-text">End of life - no new customers - all customers migrate to Linkly Orbit</div>
+        </div>
+        <div class="prod-hdr">
+          <div class="hdr-top">
+            <div class="status-chips">
+              <span class="status-chip bg-red">EOL - no new sales</span>
+              <span class="status-chip bg-amber c-amber">Integrated - PAX only - approx 10K terminals</span>
+            </div>
+          </div>
+          <div class="prod-name">Linkly PayApp <span style="font-size:13px;font-weight:400;color:var(--amber-700);margin-left:4px">(Integrated)</span> <span class="eol-label">migrate to Orbit</span></div>
+          <div class="archetype">"I need Linkly's app on the terminal - not a third-party one." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Payment platforms. EOL - no new customers.</span></div>
+        </div>
+        <div class="modes-row">
+          <span class="modes-label">Modes</span>
+          <span class="mode-pill bg-amber c-amber" style="border-color:var(--amber-100)">Integrated - On-Prem</span>
+          <span class="mode-pill bg-amber c-amber" style="border-color:var(--amber-100)">Integrated - Linkly Cloud</span>
+          <span class="mode-pill bg-amber c-amber" style="border-color:var(--amber-100)">Standalone (bespoke)</span>
+          <span class="mode-pill bg-amber c-amber" style="border-color:var(--amber-100)">MPOS V1 (bespoke)</span>
+
+        </div>
+        <div class="two-col-body">
+          <div class="sect">
+            <div class="sect-label c-amber">Standard (as-sold)</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Linkly Pay App V1</strong> on PAX Android</div><span class="price price-real">$10.60 - $17.45</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Sector PaySuite TMS</strong> - mandatory third party</div><span class="price price-real">included</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>IP Gateway and Hostlink</strong></div><span class="price price-real">included</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text">On-Prem or Linkly Cloud</div><span class="price price-real">included</span></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label c-red">Bespoke per customer (the problem)</div>
+            <div class="item"><div class="dot dot-red"></div><div class="item-text">MPOS mode via MPOS V1 API</div><span class="price price-real">included</span></div>
+            <div class="item"><div class="dot dot-red"></div><div class="item-text">Custom receipt and workflow config</div><span class="price price-real">included</span></div>
+
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+            <div class="ctags"><span class="ctag" data-tip="Terminals:   3,208&#10;Feb revenue: $34K/mo&#10;Rate:        $10.60/terminal">WPAY</span><span class="ctag" data-tip="Terminals:   3,822&#10;Feb revenue: $68K/mo&#10;Rate:        $17.71/terminal">Live Payments</span><span class="ctag" data-tip="Terminals:   1,810&#10;Feb revenue: $49K/mo&#10;Rate:        $26.96/terminal">Till</span><span class="ctag" data-tip="Terminals:   808&#10;Feb revenue: $12K/mo&#10;Rate:        $14.61/terminal">Omnevo</span><span class="ctag" data-tip="Terminals:   134&#10;Feb revenue: $2K/mo&#10;Rate:        $15.50/terminal">Netcabs</span><span class="ctag" data-tip="Terminals:   30&#10;Feb revenue: $0K/mo">SenPos</span><span class="ctag" data-tip="Terminals:   2,440&#10;Feb revenue: $4K/mo&#10;Rate:        $1.68/terminal">URPay</span><span class="ctag" data-tip="Terminals:   392&#10;Feb revenue: $1K/mo&#10;Rate:        $2.98/terminal">Venue Smart</span></div>
+            <div class="item" style="margin-top:8px"><div class="dot dot-teal"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">All migrate to Orbit. Hostlink re-certification required per acquirer. <span class="qref">Q4</span></div></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+            <div class="rev-badge">$1.7M</div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Per terminal: $10.60 (WPAY) to $17.45 (Live Payments). Till Standalone billed separately at $6.83.</div></div>
+          </div>
+        </div>
+        <div class="tech-row">
+          <div>
+            <div class="tech-label c-amber">Linkly supplies</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">Pay App V1 (PAX Android only) <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">EFT-Client / Linkly Cloud <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">MPOS V1 API on-device <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">IP Gateway and Hostlink (bespoke per acquirer) <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+          </div>
+          <div>
+            <div class="tech-label" style="color:var(--gray-400)">Third party supplies</div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">PAX hardware: A920 PRO, A920, A910s, A80, A77, A35 <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Sector PaySuite TMS - mandatory <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Sector</span></div></div>
+          </div>
+        </div>
+        <div class="pricing-note">All PayApp pricing is as-contracted. Rates vary significantly by customer and are not standardised - this is the problem the new taxonomy addresses.</div>
+      </div>
+
+    </div><!-- /grid -->
+    </div><!-- /scroll -->
+    </div><!-- /leg-integrated -->
+
+    <div id="leg-standalone" class="mode-panel">
+    <div class="products-scroll">
+    <div class="products-grid grid-1">
+      <!-- PAYAPP STANDALONE EOL -->
+      <div class="prod eol">
+        <div class="eol-strip">
+          <div class="eol-strip-dot"></div>
+          <div class="eol-strip-text">End of life - no new customers - migrate to Orbit Standalone</div>
+        </div>
+        <div class="prod-hdr">
+          <div class="hdr-top">
+            <div class="status-chips">
+              <span class="status-chip bg-red">EOL - no new sales</span>
+              <span class="status-chip bg-amber c-amber">PAX only - one confirmed customer</span>
+            </div>
+          </div>
+          <div class="prod-name">Linkly PayApp <span style="font-size:13px;font-weight:400;color:var(--amber-700);margin-left:4px">(Standalone)</span> <span class="eol-label">migrate to Orbit Standalone</span></div>
+          <div class="archetype">"I need a Linkly-managed terminal with no POS connected - but I still want Linkly to own the app." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Terminal-only deployments on the PayApp stack. One confirmed customer (Till). Placeholder - other customers may have undocumented Standalone usage.</span></div>
+        </div>
+        <div class="modes-row">
+          <span class="modes-label">Modes</span>
+          <span class="mode-pill bg-amber c-amber" style="border-color:var(--amber-100)">Standalone - terminal-driven UI</span>
+          <span class="mode-pill mpill-na">Integrated</span>
+          <span class="mode-pill mpill-na">MPOS</span>
+        </div>
+        <div class="prod-body">
+          <div class="sect">
+            <div class="sect-label c-amber">Standard (as-sold)</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Linkly Pay App V1</strong> - terminal-driven UI on PAX Android</div><span class="price price-real">$6.83</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Sector PaySuite TMS</strong> - mandatory third party</div><span class="price price-real">included</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>IP Gateway and Hostlink</strong></div><span class="price price-real">included</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text">No middleware layer - no POS to bridge</div><span class="price price-real">included</span></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+            <div class="ctags">
+              <span class="ctag" data-tip="Terminals:   1,810&#10;Feb revenue: $12K/mo (Standalone)&#10;Rate:        $6.83/terminal">Till</span>
+            </div>
+            <div class="item" style="margin-top:6px"><div class="dot dot-teal"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">Only confirmed PayApp Standalone customer. Other PayApp customers may have undocumented Standalone usage. All migrate to Orbit Standalone. <span class="qref">Q4</span></div></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+            <div class="rev-badge">~$148K/yr</div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text"><span class="note">$6.83/terminal x 1,810 terminals x 12 months. Feb 2026 actual: ~$12.4K/mo. Confirmed from Pricing sheet (Till Standalone line).</span></div></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Difference from PayApp Integrated</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">No middleware component. Terminal operates independently. Rate $6.83 vs Integrated $10.60-$17.45 - gap reflects missing middleware layer.</div></div>
+          </div>
+        </div>
+        <div class="tech-row">
+          <div>
+            <div class="tech-label c-amber">Linkly supplies</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">Pay App V1 - terminal-driven mode (PAX) <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">IP Gateway and Hostlink <span class="t-chip bg-amber c-amber">Linkly</span></div></div>
+          </div>
+          <div>
+            <div class="tech-label" style="color:var(--gray-400)">Third party supplies</div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">PAX hardware <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+            <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Sector PaySuite TMS - mandatory <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Sector</span></div></div>
+            <div class="item"><div class="dot dot-teal" style="background:var(--teal-400)"></div><div class="item-text" style="font-size:11px;color:var(--teal-700)">No EFT-Client - no POS to bridge. Simpler stack than Integrated.</div></div>
+          </div>
+        </div>
+        <div class="pricing-note">Placeholder - Till is the only confirmed Standalone customer. Treat revenue figure as estimate until full PayApp Standalone audit is completed.</div>
+      </div>
+
+    </div><!-- /grid -->
+    </div><!-- /scroll -->
+    </div><!-- /leg-standalone -->
+
+  </div><!-- /section-legacy -->
+
+  <!-- NEW PRODUCTS -->
+  <div id="section-new" class="section-panel">
+    <div class="mode-nav">
+      <div class="mode-btn active" onclick="switchMode('integrated')">Integrated</div>
+      <div class="mode-btn" onclick="switchMode('standalone')">Standalone</div>
+    </div>
+
+    <!-- INTEGRATED -->
+    <div id="mode-integrated" class="mode-panel active">
+      <div class="scroll-hint">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#8A93A8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Scroll right to see all 3 integrated products
+      </div>
+      <div class="products-scroll">
+      <div class="products-grid grid-3">
+
+        <!-- CONNECT (now the umbrella - Bridge merged in as API mode) -->
+        <div class="prod">
+          <div class="prod-hdr">
+            <div class="hdr-top">
+              <div class="status-chips">
+                <span class="status-chip bg-blue">Connectivity only - 3 modes</span>
+              </div>
+            </div>
+            <div class="prod-name">Linkly Connect</div>
+            <div class="archetype">"I bring the terminal, acquiring and pay app. Linkly just connects my POS to the terminal." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Umbrella for all connectivity-only plays - traditional middleware, third-party terminal API, and SoftPOS.</span></div>
+          </div>
+          <div class="modes-row">
+            <span class="modes-label">Modes</span>
+            <span class="mode-pill mpill-std">On-Prem (live)</span>
+            <span class="mode-pill bg-purple c-purple" style="border-color:var(--purple-100)">API (emerging)</span>
+            <span class="mode-pill bg-purple c-purple" style="border-color:var(--purple-100)">SoftPOS (emerging)</span>
+            <span class="mode-note">No Standalone or MPOS - no pay app supplied in this product</span>
+          </div>
+          <div class="prod-body">
+            <div class="sect">
+              <div class="sect-label c-blue">Modes</div>
+              <div class="item"><div class="dot dot-blue"></div><div class="item-text"><strong>On-Prem</strong> - Windows EFT-Client + EFT-Server. Traditional terminals (Ingenico, Verifone, PAX).</div><span class="price price-proposed">$8 - $12 *</span></div>
+              <div class="item"><div class="dot dot-purple"></div><div class="item-text"><strong>API</strong> - Orbit Bridge API to third-party terminals (Square, Clover) <span class="qref">Q6</span></div><span class="price price-tbd">TBD</span></div>
+              <div class="item"><div class="dot dot-purple"></div><div class="item-text"><strong>SoftPOS</strong> - COTS Android device as the terminal <span class="qref">Q9</span></div><span class="price price-tbd">TBD</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label c-amber">Add-ons (On-Prem mode)</div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Linkly Cloud</strong> <span class="qref">Q3</span></div><span class="price price-proposed">+$2 - $4 *</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Oracle Bridge - non-Windows variant</div><span class="price price-inv">Requires investigation</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Onboarding / implementation</div><span class="price price-proposed">$25 - $35 NR *</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+              <div class="ctags">
+                <span class="ctag dim" data-tip="Mode: On-Prem&#10;Status: TBC - not confirmed">Airwallex</span>
+                <span class="ctag" data-tip="Mode: API&#10;Status: confirmed">Square</span>
+                <span class="ctag dim" data-tip="Mode: API&#10;Status: TBC - licence line in Pricing sheet">Clover</span>
+                <span class="ctag dim" data-tip="Mode: SoftPOS&#10;Status: scope TBD">SoftPOS prospects</span>
+              </div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px"><span class="price price-inv" style="vertical-align:middle">Requires investigation</span> <span class="qref">Q1</span></div></div>
+              <div class="item"><div class="dot dot-purple"></div><div class="item-text" style="font-size:11px">No confirmed customer in any mode. Airwallex (On-Prem) is TBC; API and SoftPOS modes are pre-revenue.</div></div>
+            </div>
+          </div>
+          <div class="tech-row">
+            <div>
+              <div class="tech-label c-blue">Linkly supplies</div>
+              <div class="item"><div class="dot dot-blue"></div><div class="item-text" style="font-size:11px">EFT-Client + EFT-Server (On-Prem) <span class="t-chip bg-blue c-blue">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-purple"></div><div class="item-text" style="font-size:11px">Orbit Bridge API (API mode) <span class="t-chip bg-purple c-purple">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-purple"></div><div class="item-text" style="font-size:11px">POS integration SDK <span class="t-chip bg-purple c-purple">Linkly</span></div></div>
+            </div>
+            <div>
+              <div class="tech-label" style="color:var(--gray-400)">Third party / customer</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Terminal hardware - any vendor <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Pay app, TMS, Gateway, Acquirer <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+            </div>
+          </div>
+          <div class="pricing-note">* On-Prem pricing proposed. API and SoftPOS revenue models undefined - <span class="qref">Q6</span> blocks formal pricing of consolidated Connect.</div>
+        </div>
+
+        <!-- CORE -->
+        <div class="prod">
+          <div class="prod-hdr">
+            <div class="hdr-top">
+              <div class="status-chips">
+                <span class="status-chip bg-blue2" style="background:var(--blue2-bg);color:var(--blue2-text)">Middleware + IP Gateway</span>
+                <span class="status-chip bg-green">$28.2M FY26B - 86% of revenue</span>
+              </div>
+            </div>
+            <div class="prod-name">Linkly Core</div>
+            <div class="archetype">"I'm a bank acquirer. Route my transactions reliably - handle the connectivity problem." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Bank acquirers and large enterprise merchants.</span></div>
+          </div>
+          <div class="modes-row">
+            <span class="modes-label">Modes</span>
+            <span class="mode-pill mpill-std">On-Prem standard</span>
+            <span class="mode-pill mpill-add">Linkly Cloud add-on <span class="qref">Q3</span></span>
+            <span class="mode-note">Integrated only - Standalone and MPOS not possible without a pay app</span>
+          </div>
+          <div class="prod-body">
+            <div class="sect">
+              <div class="sect-label c-blue2">Standard</div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text"><strong>On-Prem middleware</strong> - Windows EFT-Client</div><span class="price price-real">$7.17 - $15.44</span></div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text"><strong>IP Gateway</strong> - 8 gateways, 2 data centres - standard in Core, absent in Connect</div><span class="price price-real">$2.23 - $4.51</span></div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text"><strong>Per-acquirer Hostlink</strong> - certified bank connection</div><span class="price price-real">included</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label c-amber">Add-ons</div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Linkly Cloud</strong> <span class="qref">Q3</span></div><span class="price price-proposed">+$2 - $4 *</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Oracle Bridge - non-Windows variant</div><span class="price price-inv">Requires investigation</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Platform / VAS flat fee (Myer, Westpac arrangements)</div><span class="price price-real">by contract</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Onboarding / implementation</div><span class="price price-real">$25 - $111 NR</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+              <div class="ctags"><span class="ctag" data-tip="Terminals:   62,071&#10;Feb revenue: $745K/mo&#10;Rate:        $12.01/terminal">CBA</span><span class="ctag" data-tip="Terminals:   43,494&#10;Feb revenue: $601K/mo&#10;Rate:        $13.82/terminal">ANZ</span><span class="ctag" data-tip="Terminals:   26,730&#10;Feb revenue: $318K/mo&#10;Rate:        $11.91/terminal">NAB</span><span class="ctag" data-tip="Terminals:   20,104&#10;Feb revenue: $302K/mo&#10;Rate:        $15.02/terminal">Westpac</span><span class="ctag" data-tip="Terminals:   5,593&#10;Feb revenue: $79K/mo&#10;Rate:        $14.04/terminal">Fiserv</span><span class="ctag" data-tip="Terminals:   6,917&#10;Feb revenue: $151K/mo&#10;Rate:        $21.89/terminal">Woolworths</span><span class="ctag" data-tip="Terminals:   0&#10;Feb revenue: $23K/mo">Myer</span><span class="ctag" data-tip="Terminals:   2,910&#10;Feb revenue: $42K/mo&#10;Rate:        $14.56/terminal">Suncorp</span><span class="ctag" data-tip="Terminals:   2,979&#10;Feb revenue: $51K/mo&#10;Rate:        $17.09/terminal">Zeller</span><span class="ctag" data-tip="Terminals:   2,762&#10;Feb revenue: $28K/mo&#10;Rate:        $10.12/terminal">Skyzer NZ</span><span class="ctag" data-tip="Terminals:   2,144&#10;Feb revenue: $25K/mo&#10;Rate:        $11.82/terminal">Verifone NZ</span><span class="ctag eol-tag" data-tip="Terminals:   0&#10;Feb revenue: $0K/mo">Bendigo</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+              <div class="rev-badge">$28.2M</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Licence: $7.17 to $15.44 per terminal per month - more than 2x variance. Gateway bundled for some, separate for others. Onboarding: $25 (Skyzer) to $111 (CBA) per terminal.</div></div>
+            </div>
+          </div>
+          <div class="tech-row">
+            <div>
+              <div class="tech-label c-blue2">Linkly supplies</div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text" style="font-size:11px">EFT-Client and EFT-Server <span class="t-chip bg-blue2" style="background:var(--blue2-bg);color:var(--blue2-text)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text" style="font-size:11px">IP Gateway (8 instances, 2 data centres) <span class="t-chip bg-blue2" style="background:var(--blue2-bg);color:var(--blue2-text)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-blue2"></div><div class="item-text" style="font-size:11px">Per-acquirer certified Hostlink <span class="t-chip bg-blue2" style="background:var(--blue2-bg);color:var(--blue2-text)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px;color:var(--gray-400)">No PAN-level data access on IP Gateway path</div></div>
+            </div>
+            <div>
+              <div class="tech-label" style="color:var(--gray-400)">Third party / customer</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Terminal hardware (Ingenico, Verifone, PAX) <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Pay app - bank-nominated <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">TMS - bank-nominated <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+            </div>
+          </div>
+          <div class="pricing-note">* Linkly Linkly Cloud add-on pricing is proposed. All other rates are confirmed from the FY26 budget and Pricing sheet.</div>
+        </div>
+
+        <!-- ORBIT -->
+        <div class="prod featured">
+          <div class="prod-hdr">
+            <div class="hdr-top">
+              <div class="status-chips">
+                <span class="status-chip bg-teal" style="background:var(--teal-50);color:var(--teal-800)">Full Linkly stack</span>
+                <span class="status-chip" style="background:var(--gray-100);color:var(--gray-400)">$1.7M FY26B - early stage</span>
+              </div>
+            </div>
+            <div class="prod-name">Linkly Orbit</div>
+            <div class="archetype">"Hardware-agnostic terminals at scale. Own every layer. I bring the acquirer." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Modern acquirers and platforms. PayApp migration destination.</span></div>
+          </div>
+          <div class="modes-row">
+            <span class="modes-label">Modes</span>
+            <span class="mode-pill mpill-std">On-Prem standard</span>
+            <span class="mode-pill mpill-add">Linkly Cloud add-on <span class="qref">Q3</span></span>
+            <span class="mode-note">Standalone and MPOS available separately - see Standalone tab</span>
+          </div>
+          <div class="prod-body">
+            <div class="sect">
+              <div class="sect-label c-teal">Standard</div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit Pay App</strong> - PAX, Ingenico, Castles (hardware-agnostic)</div><span class="price price-real">$14 - $18.50</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit TMS</strong> - Linkly in-house, web-based</div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit Gateway</strong> - PAN-level data access</div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Per-acquirer Hostlink</strong> - modular, certified</div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text">On-Prem middleware</div><span class="price price-real">included</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label c-amber">Add-ons</div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Linkly Cloud</strong> <span class="qref">Q3</span></div><span class="price price-proposed">+$2 - $4 *</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Onboarding / terminal certification</div><span class="price price-proposed">$30 - $40 NR *</span></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+              <div class="ctags"><span class="ctag" data-tip="Rate:        $15.36/terminal&#10;Feb revenue: No actuals yet (budget only)&#10;FY26 budget: $982K integrated + $210K standalone">ANZ (ANZWL)</span><span class="ctag" data-tip="Terminals:   5,593&#10;Feb revenue: $79K/mo&#10;Rate:        $14.04/terminal">Fiserv</span><span class="ctag dim">Global Payments (TBC)</span><span class="ctag" data-tip="Feb revenue: $5K/mo">Aggregators (pool)</span></div>
+              <div class="item" style="margin-top:8px"><div class="dot dot-teal"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">ANZ is anchor acquirer. All PayApp customers migrate here. Zero actuals to date - all FY26 revenue is budgeted.</div></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+              <div class="rev-badge">$1.7M</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">ANZ $15.36 flat. Aggregators $14 to $18.50 tiered. All budget-only.</div></div>
+            </div>
+          </div>
+          <div class="tech-row">
+            <div>
+              <div class="tech-label c-teal">Linkly supplies (all layers)</div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit Pay App (multi-vendor Android) <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit TMS (web-based) <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit Gateway (PAN-level access) <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px;color:var(--teal-700)">PAN data enables future value-added services not possible on Core</div></div>
+            </div>
+            <div>
+              <div class="tech-label" style="color:var(--gray-400)">Third party / customer</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Orbit-certified hardware (multi-vendor) <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Acquirer host connection <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Acquirer</span></div></div>
+            </div>
+          </div>
+          <div class="pricing-note">* Linkly Cloud add-on pricing is proposed. Base rates ($14 - $18.50) are confirmed from FY26 budget data.</div>
+        </div>
+
+      </div>
+      </div>
+    </div><!-- /integrated -->
+
+    <!-- STANDALONE -->
+    <div id="mode-standalone" class="mode-panel">
+      <div class="products-scroll">
+      <div class="products-grid grid-1">
+        <div class="prod featured">
+          <div class="prod-hdr">
+            <div class="hdr-top">
+              <div class="status-chips">
+                <span class="status-chip" style="background:var(--teal-50);color:var(--teal-800)">Full Linkly stack</span>
+                <span class="status-chip" style="background:var(--teal-50);color:var(--teal-800)">No POS required</span>
+                <span class="status-chip" style="background:var(--gray-100);color:var(--gray-400)">$403K FY26B - early stage</span>
+              </div>
+            </div>
+            <div class="prod-name">Linkly Orbit Standalone</div>
+            <div class="archetype">"I may run a POS but I also need terminals that work independently - for mobility, flexibility, or as backup if the POS goes down." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Small merchants, hospitality, pop-ups, and merchants needing mobile or backup terminals. POS software may still be present.</span></div>
+          </div>
+          <div class="modes-row">
+            <span class="modes-label">Modes</span>
+            <span class="mode-pill mpill-std">Standalone standard</span>
+            <span class="mode-pill mpill-add">MPOS add-on (POS-Lite on device)</span>
+            <span class="mode-note">No middleware layer - there is no POS to bridge. Cleanest Linkly stack. Middleware drops out entirely.</span>
+          </div>
+          <div class="two-col-body">
+            <div class="sect">
+              <div class="sect-label c-teal">Standard</div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit Pay App</strong> - PAX, Ingenico, Castles</div><span class="price price-real">$2.56 - $7.50</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit TMS</strong> - Linkly in-house</div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Orbit Gateway</strong> - same infrastructure as Orbit Integrated</div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text"><strong>Per-acquirer Hostlink</strong></div><span class="price price-real">included</span></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">No middleware - nothing to bridge. Simpler and cheaper than Integrated.</div></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label c-amber">Add-on: MPOS</div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>MPOS via MPOS V2 API</strong> - POS-Lite app lives on the terminal itself</div><span class="price price-proposed">+$3 - $8 *</span></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text">Separate certification and distribution model vs Integrated MPOS</div></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">MPOS is Standalone with a POS app on-device - a step up from pure Standalone, not a variant of Integrated</div></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Customers</div>
+              <div class="ctags"><span class="ctag" data-tip="Rate:        $2.56-$7.50/terminal&#10;Feb revenue: No actuals yet (budget only)&#10;FY26 budget: $210K standalone">ANZ (ANZWL)</span><span class="ctag" data-tip="Feb revenue: $5K/mo">Aggregators (pool)</span><span class="ctag" data-tip="Terminals:   1,810&#10;Feb revenue: $49K/mo&#10;Rate:        $6.83/terminal (Standalone)">Till (migrating from LPA Standalone)</span></div>
+              <div class="item" style="margin-top:8px"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px;color:var(--teal-700)">Acquirer sells directly to small merchants - no POS vendor in the channel. Distinct go-to-market from Integrated.</div></div>
+            </div>
+            <div class="sect">
+              <div class="sect-label" style="color:var(--gray-400)">Revenue FY26B</div>
+              <div class="rev-badge">$403K</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">ANZ $210K (flat fee model). Aggregators $193K ($2.56 to $7.50 per terminal per month). Lower rate than Integrated reflects no middleware component. <span class="qref">Q5</span></div></div>
+            </div>
+          </div>
+          <div class="tech-row">
+            <div>
+              <div class="tech-label c-teal">Linkly supplies</div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit Pay App (multi-vendor) <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit TMS <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Orbit Gateway (PAN access) <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px">Hostlink <span class="t-chip" style="background:var(--teal-50);color:var(--teal-800)">Linkly</span></div></div>
+              <div class="item"><div class="dot dot-amber"></div><div class="item-text" style="font-size:11px">MPOS V2 API (add-on only) <span class="t-chip bg-amber c-amber">Add-on</span></div></div>
+            </div>
+            <div>
+              <div class="tech-label" style="color:var(--gray-400)">Third party / customer</div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Orbit-certified hardware (multi-vendor) <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Third party</span></div></div>
+              <div class="item"><div class="dot dot-gray"></div><div class="item-text" style="font-size:11px">Acquirer host connection <span class="t-chip" style="background:var(--gray-100);color:var(--gray-500)">Acquirer</span></div></div>
+              <div class="item" style="margin-top:8px"><div class="dot dot-teal"></div><div class="item-text" style="font-size:11px;color:var(--teal-700)">No EFT-Client, no Linkly Cloud, no ConnectApp. No middleware at all.</div></div>
+            </div>
+          </div>
+          <div class="pricing-note">* MPOS add-on pricing is proposed. Base Standalone rates ($2.56 to $7.50) are confirmed from FY26 budget data.</div>
+        </div>
+      </div>
+      </div>
+    </div><!-- /standalone -->
+  </div><!-- /section-new -->
+
+  <!-- EMERGING -->
+  <div id="section-emerging" class="section-panel">
+    <div class="products-scroll">
+    <div class="products-grid grid-2">
+
+      <!-- ORBIT+ -->
+      <div class="prod emerging-card">
+        <div class="emerging-banner">
+          <div class="emerging-banner-dot"></div>
+          <div class="emerging-banner-text">Orbit+ is a modular feature layer on top of Linkly Orbit - not a terminal product. Customers must be on Orbit first. This is the long-term growth engine.</div>
+        </div>
+        <div class="prod-hdr">
+          <div class="hdr-top">
+            <div class="status-chips">
+              <span class="status-chip bg-purple">Modular feature layer</span>
+              <span class="status-chip bg-purple">Per-feature pricing</span>
+              <span class="status-chip" style="background:var(--gray-100);color:var(--gray-400)">$12K FY26B - pilot only</span>
+            </div>
+          </div>
+          <div class="prod-name">Linkly Orbit+</div>
+          <div class="archetype">"Give my merchants more than connectivity. Let me pick and choose the features." <br><span style="font-style:normal;font-size:11px;color:var(--gray-400)">Acquirers and aggregators differentiating their merchant value proposition.</span></div>
+        </div>
+        <div class="modes-row">
+          <span class="modes-label">Pricing model</span>
+          <span class="mode-pill mpill-std">Orbit licence (required base)</span>
+          <span class="mode-pill mpill-add">per feature / terminal / month</span>
+          <span class="mode-note" style="color:var(--teal-700)">Each enabled feature adds incremental yield on top of the Orbit base rate</span>
+        </div>
+        <div class="prod-body">
+          <div class="sect">
+            <div class="sect-label c-teal">Currently building (FY26)</div>
+            <div class="item"><div class="dot dot-teal2"></div><div class="item-text"><strong>APM Connectivity</strong> - Apple Pay, AliPay, Samsung Pay</div><span class="price price-proposed">$2 - $12 *</span></div>
+            <div class="item"><div class="dot dot-teal2"></div><div class="item-text"><strong>Gift Card Connectivity</strong> - Blackhawk, GIFTA, Ultimate GCs</div><span class="price price-proposed">$1 - $10 *</span></div>
+            <div class="item"><div class="dot dot-teal2"></div><div class="item-text"><strong>Loyalty Connectivity</strong> - Flybuys, Qantas FF, Everyday Rewards</div><span class="price price-proposed">$2 - $10 *</span></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label c-amber">Planned (FY26 to FY27)</div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Redundancy</strong> - multi-hostlink failover</div><span class="price price-proposed">$1 - $5 *</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>POS-on-Device</strong> - POS-Lite app on terminal</div><span class="price price-tbd">TBD</span></div>
+            <div class="item"><div class="dot dot-amber"></div><div class="item-text"><strong>Data products</strong> - monetise Orbit Gateway PAN data</div><span class="price price-tbd">TBD</span></div>
+          </div>
+          <div class="sect">
+            <div class="sect-label" style="color:var(--gray-400)">Strategic upside</div>
+            <div class="item"><div class="dot dot-teal2"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">At 50K Orbit terminals, $3 average Orbit+ yield = $1.8M incremental annual revenue on top of Orbit base.</div></div>
+            <div class="item"><div class="dot dot-teal2"></div><div class="item-text" style="color:var(--teal-700);font-size:11px">PAN-level data on Orbit Gateway enables monetisation not available on Core IP Gateway path. Modelled on ACI Worldwide playbook.</div></div>
+          </div>
+        </div>
+        <div class="pricing-note">* All Orbit+ pricing is proposed. The Orbit+ strategy deck (Sep 2025) labels these ranges as hypothesis. Subject to commercial validation.</div>
+      </div>
+
+      <!-- BRIDGE merged into Connect as the API mode - see Active Portfolio -->
+
+    </div>
+    </div>
+  </div><!-- /section-emerging -->
+
+</div>
+</div><!-- /panel-products -->
+
+<!-- STRATEGIC QUESTIONS -->
+<div id="panel-questions" class="tab-panel">
+  <div class="sq-section">
+    <div class="sq-title">Critical strategic questions - resolve before pricing phase</div>
+    <div class="sq-grid">
+
+      <div class="sq-card">
+        <div class="sq-num">Q1</div>
+        <div class="sq-q">Does Connect (now the umbrella for On-Prem, API and SoftPOS modes) survive as a separate product, or is it Core with the gateway toggled off?</div>
+        <div class="sq-body">Core is defined by the IP Gateway being standard. Connect = connectivity only, no gateway, regardless of mode. With Bridge merged in, Connect now spans traditional middleware, third-party terminal API, and SoftPOS - one product story, three delivery modes. If that distinction holds commercially, Connect is a real product. If not, the modes become pricing variants of Core with a gateway line-item waived. This question now also absorbs the old Q7 (Bridge cannibalisation) - same boundary, one decision.</div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q2</div>
+        <div class="sq-q">What is the Orbit base price relative to Core and PayApp legacy rates?</div>
+        <div class="sq-body">Must be at or above equivalent legacy rates to avoid cannibalising Core revenue on migration. Current Orbit rates: ANZ $15.36 flat, aggregators $14 to $18.50 tiered. PayApp rates: $10.60 to $17.45. The migration pricing model needs to be defined. <span class="qref">Q4</span></div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q3</div>
+        <div class="sq-q">Is Linkly Cloud an add-on across all products, or does it become standard at some point?</div>
+        <div class="sq-body">Linkly Cloud is OS-agnostic, lower support burden, direction of travel. On-Prem is where current volume lives. A surcharge incentivises migration but creates friction with large estates (CBA, NAB, ANZ). The answer also determines whether On-Prem has a sunset date.</div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q4</div>
+        <div class="sq-q">What is the migration commercial model for PayApp to Orbit?</div>
+        <div class="sq-body">Transition pricing, hostlink re-certification fee, step-up schedule? This affects approx $1.7M of current PayApp revenue and the speed of the migration programme. Does Linkly charge for re-certification, or absorb it to accelerate the move?</div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q5</div>
+        <div class="sq-q">How should Standalone be priced relative to Integrated?</div>
+        <div class="sq-body">Current data shows Standalone at $2.56 to $7.50 vs $15.36 for Integrated (ANZ). The gap reflects the absence of the middleware component. Does this hold as the standard differential, or should it be reset when the new taxonomy is formalised?</div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q6</div>
+        <div class="sq-q">What is the revenue model for Connect's API mode (was: Bridge)?</div>
+        <div class="sq-body">Per-transaction, per-connection, or platform fee? Who does Linkly contract with - the POS vendor, the merchant, or the third party terminal provider? The On-Prem mode is per-terminal/month; API mode probably should not be. Until this is answered, the API mode cannot enter the pricing phase, which means consolidated Connect cannot be priced as one product yet.</div>
+      </div>
+
+      <div class="sq-card sq-resolved">
+        <div class="sq-num">Q7 · Resolved via Q1</div>
+        <div class="sq-q">Does Bridge cannibalise Core or open a new market?</div>
+        <div class="sq-body">Resolved by the Connect/Bridge merge. Bridge is now the API mode within Connect - so the cannibalisation question collapses into Q1 (Connect-vs-Core boundary). Whatever answers Q1 for the On-Prem mode answers it for the API and SoftPOS modes too: same product, same commercial fence.</div>
+      </div>
+
+      <div class="sq-card">
+        <div class="sq-num">Q8</div>
+        <div class="sq-q">What is the Clover status in the Connect API mode?</div>
+        <div class="sq-body">A Clover licence line appears in the Pricing sheet - more real than previously assumed. Confirm whether this is a live commercial relationship, a draft term sheet, or a dropped integration before the API mode is taken any further commercially. Clover is the largest known prospective API-mode customer after Square.</div>
+      </div>
+      <div class="sq-card">
+        <div class="sq-num">Q9</div>
+        <div class="sq-q">Is SoftPOS its own Connect mode, and does it share API mode's commercial model?</div>
+        <div class="sq-body">SoftPOS (COTS Android device acting as a payment terminal) currently sits as the third Connect mode. Confirm: is it commercially distinct from API mode, or is it a sub-flavour of it? If distinct, it needs its own pricing answer (separate from Q6). If a sub-flavour, Q6 covers it. This affects whether Connect has 2 or 3 commercial models bundled inside it.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="panel-specsheet" class="tab-panel">
+<div class="main">
+
+  <div class="sc-sub-nav">
+    <div class="sc-sub-btn active" onclick="switchScSub('compare')">Full comparison</div>
+    <div class="sc-sub-btn" onclick="switchScSub('pricing')">Pricing summary</div>
+  </div>
+
+  <div id="sc-compare" class="sc-sub-panel active">
+  <div class="sc-legend">
+    <span class="sc-leg-title">Key</span>
+    <div class="sc-leg-item"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Included standard</div>
+    <div class="sc-leg-item"><span class="v-a">+</span> Available as add-on</div>
+    <div class="sc-leg-item"><span class="v-n">-</span> Not available</div>
+    <div class="sc-leg-item" style="margin-left:auto;font-size:11px;color:var(--gray-400)">* = proposed pricing &nbsp; NR = non-recurring</div>
+  </div>
+  <div class="sc-scroll">
+  <table class="sc-table">
+    <colgroup><col class="sc-feat"><col class="sc-prod"><col class="sc-prod"><col class="sc-prod"><col class="sc-prod"><col class="sc-prod"><col class="sc-prod"></colgroup>
+    <thead><tr class="sc-prod-hdr">
+      <th class="sc-feat-hdr">Feature / Component</th>
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#E6F1FB;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#185FA5">Connect</span><span class="sc-psub" style="color:#185FA5">Middleware only</span></div></th>
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#DBEAFE;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#1e40af">Core</span><span class="sc-psub" style="color:#1e40af">Middleware + Gateway</span></div></th>
+      
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#FAEEDA;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#854F0B">PayApp</span><span class="sc-psub" style="color:#854F0B">PAX only</span><span class="sc-eol-tag">EOL</span></div></th>
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#D1FAE5;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#085041">Orbit Standalone</span><span class="sc-psub" style="color:#085041">Full stack no POS</span></div></th>
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#E1F5EE;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#0F6E56">Orbit</span><span class="sc-psub" style="color:#0F6E56">Full stack integrated</span></div></th>
+      <th style="padding:0;border-bottom:1px solid var(--gray-200);vertical-align:bottom;background:#EEEDFE;text-align:center"><div class="sc-ph-inner"><span class="sc-pname" style="color:#534AB7">Orbit+</span><span class="sc-psub" style="color:#534AB7">Feature layer</span></div></th>
+    </tr></thead>
+    <tbody>
+    <tr class="sc-section"><td colspan="7">Middleware</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">On-Prem middleware (EFT-Client)</div><div class="sc-fn-sub">Windows local install</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Linkly Cloud</div><div class="sc-fn-sub">OS-agnostic REST API</div></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc sc-eol"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Oracle Bridge</div><div class="sc-fn-sub">Non-Windows middleware variant</div></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">POS integration SDK / ConnectApp</div><div class="sc-fn-sub">Bridge between POS and terminal</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-section"><td colspan="7">Gateway and routing</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">IP Gateway</div><div class="sc-fn-sub">8 gateways, 2 data centres - no PAN access</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Orbit Gateway</div><div class="sc-fn-sub">PAN-level data access</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Per-acquirer Hostlink</div><div class="sc-fn-sub">Certified connection to bank host</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Acquirer redundancy</div><div class="sc-fn-sub">Multi-hostlink failover</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-section"><td colspan="7">Terminal app and TMS</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Linkly Pay App (on-terminal)</div><div class="sc-fn-sub">Linkly-managed Android app</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Third party pay app</div><div class="sc-fn-sub">Bank-nominated or customer-supplied</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Linkly TMS (Orbit)</div><div class="sc-fn-sub">Web-based, in-house</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Third party TMS</div><div class="sc-fn-sub">Sector PaySuite (PayApp) or bank-nominated</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Multi-vendor hardware</div><div class="sc-fn-sub">PAX, Ingenico, Castles</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">PAX hardware only</div><div class="sc-fn-sub">No Ingenico or Castles support</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-section"><td colspan="7">Operating modes</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Integrated</div><div class="sc-fn-sub">POS-connected via middleware</div></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Standalone</div><div class="sc-fn-sub">Terminal-driven, no external POS</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">MPOS</div><div class="sc-fn-sub">POS app runs on the terminal device</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-s"><svg viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">SoftPOS (COTS Android)</div><div class="sc-fn-sub">Standard Android device as terminal</div></td><td class="sc-vc"><span class="v-a">+</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td></tr>
+    <tr class="sc-section"><td colspan="7">Value-added services (Orbit+)</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">APM connectivity</div><div class="sc-fn-sub">Apple Pay, AliPay, Samsung Pay</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Gift card connectivity</div><div class="sc-fn-sub">Blackhawk, GIFTA, Ultimate GCs</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Loyalty connectivity</div><div class="sc-fn-sub">Flybuys, Qantas FF, Everyday Rewards</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">POS-on-Device</div><div class="sc-fn-sub">POS-Lite app on terminal hardware</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Data products</div><div class="sc-fn-sub">PAN-level transaction data monetisation</div></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc sc-eol"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-n">-</span></td><td class="sc-vc"><span class="v-a">+</span></td></tr>
+    <tr class="sc-section"><td colspan="7">Commercial</td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Pricing model</div></td><td class="sc-vc"><span class="v-t a">Per term · TBD modes</span></td><td class="sc-vc"><span class="v-t">Per terminal</span></td><td class="sc-vc sc-eol"><span class="v-t">Per terminal</span></td><td class="sc-vc"><span class="v-t">Per terminal</span></td><td class="sc-vc"><span class="v-t">Per terminal</span></td><td class="sc-vc"><span class="v-t p">Per feature</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Base price / terminal / month</div></td><td class="sc-vc"><span class="v-t a">$8-12 *</span></td><td class="sc-vc"><span class="v-t g">$7.17-$15.44</span></td><td class="sc-vc sc-eol"><span class="v-t">$6.83-$17.45</span></td><td class="sc-vc"><span class="v-t g">$2.56-$7.50</span></td><td class="sc-vc"><span class="v-t g">$14-$18.50</span></td><td class="sc-vc"><span class="v-t a">+$1-$15 *</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Onboarding (non-recurring)</div></td><td class="sc-vc"><span class="v-t a">$25-35 *</span></td><td class="sc-vc"><span class="v-t g">$25-$111</span></td><td class="sc-vc sc-eol"><span class="v-t">varies</span></td><td class="sc-vc"><span class="v-t gr">-</span></td><td class="sc-vc"><span class="v-t a">$30-40 *</span></td><td class="sc-vc"><span class="v-t gr">-</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">FY26 budgeted revenue</div></td><td class="sc-vc"><span class="v-t gr">-</span></td><td class="sc-vc"><span class="v-t g">$28.2M</span></td><td class="sc-vc sc-eol"><span class="v-t">$1.7M</span></td><td class="sc-vc"><span class="v-t g">$403K</span></td><td class="sc-vc"><span class="v-t g">$1.7M</span></td><td class="sc-vc"><span class="v-t">$12K</span></td></tr>
+    <tr class="sc-row"><td class="sc-fc"><div class="sc-fn">Current status</div></td><td class="sc-vc"><span class="v-t a">Live + Emerging</span></td><td class="sc-vc"><span class="v-t g">Live</span></td><td class="sc-vc sc-eol"><span class="v-t a">EOL</span></td><td class="sc-vc"><span class="v-t g">Live</span></td><td class="sc-vc"><span class="v-t g">Live</span></td><td class="sc-vc"><span class="v-t a">Pilot</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="sc-footnote">
+    <span>* Proposed pricing - not validated by contracts. Subject to commercial review before Phase 5 pricing.</span>
+    <span>PayApp column is greyed - EOL product shown for migration reference only.</span>
+    <span>Orbit+ requires Linkly Orbit as a base - it is a feature layer, not a standalone product.</span>
+  </div>
+  </div><!-- /sc-compare -->
+
+  <div id="sc-pricing" class="sc-sub-panel">
+  <div style="max-width:700px">
+    <table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--gray-200);border-radius:12px;overflow:hidden">
+      <thead><tr style="background:var(--gray-50);border-bottom:1px solid var(--gray-200)">
+        <th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400);width:140px">Product</th>
+        <th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400)">Base / terminal / month</th>
+        <th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400)">Key add-ons</th>
+        <th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400)">Onboarding NR</th>
+        <th style="padding:11px 16px;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400)">Source</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#185FA5">Connect <span style="font-size:10px;font-weight:400;color:var(--gray-400);display:block;margin-top:2px">3 modes - On-Prem / API / SoftPOS</span></td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$8 - $12 <span style="font-size:10px;color:var(--gray-400)">(On-Prem)</span><br><span style="font-size:10px;color:#6B21A8">TBD - API / SoftPOS</span></td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">Linkly Cloud +$2-4 (On-Prem)</td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$25 - $35</td><td style="padding:11px 16px"><span style="font-size:10px;background:#FFFBEB;color:#B45309;border:1px solid #FCD34D;padding:2px 7px;border-radius:4px">Proposed *</span></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#1e40af">Core</td><td style="padding:11px 16px;font-size:11px;font-family:var(--mono);color:var(--gray-700)">$7.17 - $15.44 <span style="font-size:10px;color:var(--gray-400)">(+ gateway $2.23-$4.51)</span></td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">Linkly Cloud +$2-4, VAS flat fee</td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$25 - $111</td><td style="padding:11px 16px"><span style="font-size:10px;background:#F0FDF4;color:#16A34A;border:1px solid #86EFAC;padding:2px 7px;border-radius:4px">Confirmed</span></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100);opacity:.55"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#854F0B">PayApp (EOL)</td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$6.83 - $17.45</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">Standalone $6.83 (Till only)</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">varies</td><td style="padding:11px 16px"><span style="font-size:10px;background:#F0FDF4;color:#16A34A;border:1px solid #86EFAC;padding:2px 7px;border-radius:4px">Confirmed</span></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#0F6E56">Orbit</td><td style="padding:11px 16px;font-size:11px;font-family:var(--mono);color:var(--gray-700)">$14 - $18.50 <span style="font-size:10px;color:var(--gray-400)">(ANZ $15.36 flat)</span></td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">Linkly Cloud +$2-4</td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$30 - $40 *</td><td style="padding:11px 16px"><span style="font-size:10px;background:#F0FDF4;color:#16A34A;border:1px solid #86EFAC;padding:2px 7px;border-radius:4px">Confirmed (base)</span></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#085041">Orbit Standalone</td><td style="padding:11px 16px;font-size:12px;font-family:var(--mono);color:var(--gray-700)">$2.56 - $7.50</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">MPOS +$3-8 *</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">-</td><td style="padding:11px 16px"><span style="font-size:10px;background:#F0FDF4;color:#16A34A;border:1px solid #86EFAC;padding:2px 7px;border-radius:4px">Confirmed (base)</span></td></tr>
+        <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:11px 16px;font-size:12px;font-weight:500;color:#534AB7">Orbit+</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">Orbit base required, then per feature</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">APM $2-12, Gift Card $1-10, Loyalty $2-10, Redundancy $1-5</td><td style="padding:11px 16px;font-size:11px;color:var(--gray-500)">-</td><td style="padding:11px 16px"><span style="font-size:10px;background:#FFFBEB;color:#B45309;border:1px solid #FCD34D;padding:2px 7px;border-radius:4px">Proposed *</span></td></tr>
+      </tbody>
+    </table>
+    <div class="sc-footnote" style="margin-top:12px">
+      <span>* Proposed pricing - not validated by contracts. All confirmed pricing from FY26 Budget tab and Pricing sheet.</span>
+      <span>Orbit+ pricing ranges labelled as hypothesis in the Orbit+ Strategy deck (Sep 2025).</span>
+    </div>
+  </div>
+  </div><!-- /sc-pricing -->
+
+</div>
+</div><!-- /panel-specsheet -->
+
+<script>
+function switchMain(n){
+  document.querySelectorAll('.main-tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('panel-'+n).classList.add('active');
+  var tabs = document.querySelectorAll('.main-tab');
+  var idx = n==='products'?0:n==='questions'?1:2;
+  tabs[idx].classList.add('active');
+  window.scrollTo(0,0);
+}
+function switchScSub(n){
+  document.querySelectorAll('.sc-sub-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.sc-sub-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('sc-'+n).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchSection(n){
+  document.querySelectorAll('.section-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.section-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('section-'+n).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchLegacyMode(n){
+  document.querySelectorAll('#section-legacy .mode-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('#section-legacy .mode-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById(n).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchMode(n){
+  document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.mode-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('mode-'+n).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+<div id="ctip"></div>
+<script>
+var tip = document.getElementById('ctip');
+document.querySelectorAll('.ctag[data-tip]').forEach(function(el) {
+  el.addEventListener('mouseenter', function(e) {
+    tip.textContent = el.getAttribute('data-tip').replace(/&#10;/g, '\n');
+    tip.style.display = 'block';
+    position(e);
+  });
+  el.addEventListener('mousemove', position);
+  el.addEventListener('mouseleave', function() {
+    tip.style.display = 'none';
+  });
+});
+function position(e) {
+  var x = e.clientX + 12, y = e.clientY - 10;
+  var tw = tip.offsetWidth, th = tip.offsetHeight;
+  if (x + tw > window.innerWidth - 10) x = e.clientX - tw - 12;
+  if (y + th > window.innerHeight - 10) y = e.clientY - th - 10;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
+}
+</script>
+</body>
+</html>
